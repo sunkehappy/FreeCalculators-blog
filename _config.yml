@@ -1,0 +1,33 @@
+theme: jekyll-theme-cayman
+
+# 站点基本信息
+title: Free Calculators Tech Blog
+description: Documenting technical challenges, solutions, and best practices in building a multilingual calculator platform
+url: "http://localhost:4000"
+baseurl: ""
+
+# 分页配置
+paginate: 5
+paginate_path: "/page:num/"
+
+# 禁用分类在 URL 中的使用
+permalink: /:year/:month/:day/:title.html
+
+# 插件配置
+plugins:
+- jekyll-feed
+- jekyll-sitemap
+- jekyll-seo-tag
+- jekyll-paginate
+
+# 排除文件
+exclude:
+- Gemfile
+- Gemfile.lock
+- README.md
+- vendor/
+- node_modules/
+
+# 包含文件
+include:
+- _pages

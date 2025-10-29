@@ -1,0 +1,85 @@
+---
+layout: default
+---
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <!-- 面包屑导航 -->
+  <nav class="breadcrumb">
+    <a href="{{ '/' | relative_url }}">Home</a>
+    <span class="separator">›</span>
+    <span class="current">{{ page.title }}</span>
+  </nav>
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {{ page.date | date: "%Y-%m-%d" }}
+      </time>
+      {%- if page.author -%}
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
+      {%- endif -%}
+      {%- if page.categories -%}
+        • <span class="post-categories">
+          {% for category in page.categories %}
+            <a href="{{ '/categories/' | relative_url }}#{{ category | slugify }}">{{ category }}</a>{% unless forloop.last %}, {% endunless %}
+          {% endfor %}
+        </span>
+      {%- endif -%}
+    </p>
+    
+    {%- if page.tags -%}
+      <div class="post-tags">
+        {% for tag in page.tags %}
+          <span class="tag"><a href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}">{{ tag }}</a></span>
+        {% endfor %}
+      </div>
+    {%- endif -%}
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    {{ content }}
+  </div>
+
+  <!-- 相关文章推荐 -->
+  {%- assign related_posts = site.posts | where_exp:"post","post.url != page.url" -%}
+  {%- if page.categories -%}
+    {%- assign related_posts = related_posts | where_exp:"post","post.categories contains page.categories[0]" -%}
+  {%- endif -%}
+  {%- if page.tags -%}
+    {%- assign related_posts = related_posts | where_exp:"post","post.tags contains page.tags[0]" -%}
+  {%- endif -%}
+  
+  {%- if related_posts.size > 0 -%}
+    <div class="related-posts">
+      <h3>相关文章</h3>
+      <div class="related-posts-grid">
+        {%- for post in related_posts limit:3 -%}
+          <div class="related-post-item">
+            <h4><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h4>
+            <p class="related-post-meta">
+              <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+              {%- if post.categories -%}
+                • <span class="category">{{ post.categories[0] }}</span>
+              {%- endif -%}
+            </p>
+            <p class="related-post-excerpt">{{ post.excerpt | strip_html | truncate: 100 }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="post-navigation">
+    <a href="{{ '/' | relative_url }}" class="btn">← Back to Home</a>
+    <a href="{{ '/categories/' | relative_url }}" class="btn">Categories</a>
+    <a href="{{ '/tags/' | relative_url }}" class="btn">Tags</a>
+  </div>
+
+  {%- if site.disqus.shortname -%}
+    {%- include disqus_comments.html -%}
+  {%- endif -%}
+
+  <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
+</article>
